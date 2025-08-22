@@ -1,0 +1,15 @@
+[project]
+name = "fks-engine"
+version = "0.1.0"
+description = "FKS Engine Service (orchestration & backtesting)"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "Proprietary" }
+
+dependencies = [
+  "requests",
+  "flask",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
