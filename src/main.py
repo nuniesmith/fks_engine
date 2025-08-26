@@ -11,9 +11,13 @@ import os
 import sys
 from typing import Any, Dict, List, Optional
 
-from framework.services.template import (
-	start_template_service as _framework_start_template_service,
-)
+try:
+	from framework.services.template import (
+		start_template_service as _framework_start_template_service,
+	)  # type: ignore
+except Exception:  # pragma: no cover
+	def _framework_start_template_service(*args, **kwargs):  # type: ignore
+		print("[fks_engine.main] framework.services.template missing - noop fallback")
 
 
 def _service_urls() -> Dict[str, str]:

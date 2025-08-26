@@ -1,5 +1,5 @@
 [project]
-name = "fks-engine"
+name = "fks_engine"
 version = "0.1.0"
 description = "FKS Engine Service (orchestration & backtesting)"
 requires-python = ">=3.11"
