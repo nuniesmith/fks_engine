@@ -2,14 +2,26 @@ services:
   fks_engine:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: shared/shared_docker/templates/python.Dockerfile
+    working_dir: /app/src
+    command: ["python", "-m", "fks_engine.main"]
+    environment:
+      TZ: America/Toronto
+      SERVICE_PORT: 4300
+      PYTHONPATH: /app/src
+    ports:
+      - "4300:4300"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./logs:/app/logs
     networks: [fks_net]
     healthcheck:
-      test: ["CMD-SHELL", "python -c 'import sys; sys.exit(0)'"]
-      interval: 45s
+      test: ["CMD-SHELL", "python -c 'import socket; s=socket.socket(); s.settimeout(2); s.connect((\"127.0.0.1\", 4300)); s.close()' || exit 1"]
+      interval: 30s
       timeout: 5s
-      retries: 2
-      start_period: 30s
+      retries: 3
+      start_period: 20s
 
 networks:
   fks_net:

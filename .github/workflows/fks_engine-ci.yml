@@ -6,7 +6,7 @@ concurrency:
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
     paths:
       - 'src/**'
       - 'tests/**'
@@ -121,12 +121,12 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_USERNAME != '' && format('{0}/fks_engine', env.DOCKER_USERNAME) || 'local/fks_engine' }}
+          images: ${{ env.DOCKER_USERNAME != '' && format('{0}/fks', env.DOCKER_USERNAME) || 'local/fks' }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=tag
-            type=sha
-            type=raw,value=latest
+            type=ref,event=branch,prefix=engine-
+            type=ref,event=tag,prefix=engine-
+            type=sha,prefix=engine-
+            type=raw,value=engine-latest
 
       - name: Build image
         uses: docker/build-push-action@v5
@@ -136,6 +136,7 @@ jobs:
           push: ${{ env.DOCKER_USERNAME != '' && env.DOCKER_TOKEN != '' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          load: true  # Load image to local Docker daemon for smoke test
           build-args: |
             SERVICE_RUNTIME=python
             SERVICE_TYPE=engine
