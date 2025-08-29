@@ -2,7 +2,7 @@ services:
   fks_engine:
     build:
       context: .
-      dockerfile: shared/shared_docker/templates/python.Dockerfile
+      dockerfile: shared/shared_docker/templates/Dockerfile.python
     working_dir: /app/src
     command: ["python", "-m", "fks_engine.main"]
     environment:
