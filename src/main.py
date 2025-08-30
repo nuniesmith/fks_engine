@@ -17,7 +17,22 @@ try:
 	)  # type: ignore
 except Exception:  # pragma: no cover
 	def _framework_start_template_service(*args, **kwargs):  # type: ignore
-		print("[fks_engine.main] framework.services.template missing - noop fallback")
+		print("[fks_engine.main] framework.services.template missing - starting simple Flask app")
+		# Start a simple Flask app as fallback
+		from flask import Flask, jsonify
+		app = Flask(__name__)
+		
+		@app.route('/health', methods=['GET'])
+		def health():
+			return jsonify({"status": "healthy", "service": "fks-engine"})
+		
+		# Register custom endpoints
+		custom_endpoints = _custom_endpoints()
+		for route, func in custom_endpoints.items():
+			app.add_url_rule(route, view_func=func, methods=['GET', 'POST'])
+		
+		port = int(os.getenv("ENGINE_SERVICE_PORT", "8003"))
+		app.run(host="0.0.0.0", port=port, debug=False)
 
 
 def _service_urls() -> Dict[str, str]:
@@ -351,13 +366,15 @@ def _custom_endpoints():
 
 
 def start_engine(service_name: str | None = None, service_port: int | str | None = None):
+	print("[fks_engine.main] start_engine called")
 	if service_name:
 		os.environ["ENGINE_SERVICE_NAME"] = str(service_name)
 	if service_port is not None:
 		os.environ["ENGINE_SERVICE_PORT"] = str(service_port)
 
 	name = os.getenv("ENGINE_SERVICE_NAME", "engine")
-	port = int(os.getenv("ENGINE_SERVICE_PORT", "9010"))
+	port = int(os.getenv("ENGINE_SERVICE_PORT", "4300"))
+	print(f"[fks_engine.main] Starting {name} on port {port}")
 	start_template_service(service_name=name, service_port=port)
 
 
@@ -384,6 +401,7 @@ def start_template_service(
 
 
 def main():
+	print("[fks_engine.main] Starting fks_engine service...")
 	start_engine()
 	return 0
 
