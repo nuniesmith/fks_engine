@@ -6,7 +6,7 @@ omit =
     */tests/*
     migrations/*
     sitecustomize.py
-    shared/shared_python/*
+    shared/python/*
 
 [report]
 exclude_lines =

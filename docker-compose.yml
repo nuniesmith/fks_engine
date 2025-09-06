@@ -2,7 +2,7 @@ services:
   fks_engine:
     build:
       context: .
-      dockerfile: shared/shared_docker/templates/Dockerfile.python
+      dockerfile: shared/docker/templates/Dockerfile.python
       args:
         SERVICE_NAME: fks-engine
         SERVICE_TYPE: engine
