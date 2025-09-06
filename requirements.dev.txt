@@ -1,3 +1,6 @@
 pytest
 pytest-asyncio
 httpx
+ruff
+mypy
+coverage
