@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: shared/docker/templates/Dockerfile.python
       args:
-        SERVICE_NAME: fks-engine
+        SERVICE_NAME: fks_engine
         SERVICE_TYPE: engine
         SERVICE_PORT: 4300
         PYTHON_VERSION: "3.11"
@@ -15,7 +15,7 @@ services:
       SERVICE_PORT: 4300
       ENGINE_SERVICE_PORT: 4300
       PYTHONPATH: /app/src
-      FKS_SERVICE_NAME: fks-engine
+      FKS_SERVICE_NAME: fks_engine
       FKS_SERVICE_TYPE: engine
       FKS_SERVICE_PORT: 4300
     ports:
