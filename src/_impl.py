@@ -1,4 +1,4 @@
-"""Engine service implementation (migrated from legacy top-level main.py)."""
+"""Engine service implementation (flattened, deduplicated)."""
 import os, sys
 from typing import Any, Dict, List, Optional
 
@@ -118,7 +118,8 @@ def start_engine(service_name: str | None = None, service_port: int | str | None
     if service_port is not None:
         os.environ["ENGINE_SERVICE_PORT"] = str(service_port)
     name = os.getenv("ENGINE_SERVICE_NAME", "engine")
-    port = int(os.getenv("ENGINE_SERVICE_PORT", "9010"))
+    # Prefer explicit ENGINE_SERVICE_PORT, then generic SERVICE_PORT, fallback 8003
+    port = int(os.getenv("ENGINE_SERVICE_PORT") or os.getenv("SERVICE_PORT", "8003"))
     start_template_service(service_name=name, service_port=port)
 
 
@@ -128,7 +129,7 @@ def start_template_service(service_name: str | None = None, service_port: int | 
     if service_port is not None:
         os.environ["ENGINE_SERVICE_PORT"] = str(service_port)
     name = os.getenv("ENGINE_SERVICE_NAME", "engine")
-    port = int(os.getenv("ENGINE_SERVICE_PORT", "9010"))
+    port = int(os.getenv("ENGINE_SERVICE_PORT") or os.getenv("SERVICE_PORT", "8003"))
     _framework_start_template_service(
         service_name=name, service_port=port, custom_endpoints=_custom_endpoints()
     )

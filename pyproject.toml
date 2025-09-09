@@ -1,10 +1,14 @@
 [tool.poetry]
-name = "fks_engine"
+name = "engine-service"
 version = "0.1.0"
-description = "FKS Engine Service (orchestration & backtesting)"
+description = "FKS Engine Service (flattened src layout)"
 license = "Proprietary"
-authors = ["FKS <nunie.smith01@gmail.com>"]
-packages = [ { include = "fks_engine", from = "src" } ]
+authors = ["nuniesmith"]
+# Flattened layout: no dedicated engine_service package; ship framework package + top-level modules
+packages = [
+	{ include = "framework", from = "src" }
+]
+include = ["src/main.py", "src/_impl.py"]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
@@ -20,7 +24,7 @@ pytest-asyncio = "^0.23"
 httpx = "^0.27"
 
 [tool.poetry.scripts]
-fks_engine = "fks_engine.main:main"
+engine = "main:main"
 
 [build-system]
 requires = ["poetry-core"]
